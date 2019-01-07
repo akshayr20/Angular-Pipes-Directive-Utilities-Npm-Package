@@ -2,4 +2,4 @@
  * Public API Surface of pipes
  */
 
-export * from './lib/pipes';
+export * from './lib/pipes/pipes';
