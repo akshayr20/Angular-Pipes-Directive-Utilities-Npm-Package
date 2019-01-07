@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "pipes": [
+        "dist/pipes"
+      ],
+      "pipes/*": [
+        "dist/pipes/*"
+      ]
+    }
   }
 }
