@@ -104,9 +104,31 @@ export class SafePipe implements PipeTransform {
   }
 }
 
+@Pipe({ name: 'camelCaseToRegularWord' })
+export class CamelCaseToRegularWordPipe implements PipeTransform {
+  transform(value: string, args?: any): string {
+    return value.replace(/([A-Z])/g, ' $1').replace(/^./, function(str) {
+      return str.toUpperCase();
+    });
+  }
+}
+
+@Pipe({
+  name: 'notAvailable'
+})
+export class NotAvailablePipe implements PipeTransform {
+  transform(value: any, args?: any): any {
+    if (value) {
+      return value;
+    } else {
+      return 'NA';
+    }
+  }
+}
+
 @NgModule({
   imports: [CommonModule],
-  exports: [SortByPipe, SearchPipe, HourAndMinConvertorPipe, TruncatePipe, SafePipe],
-  declarations: [SortByPipe, SearchPipe, HourAndMinConvertorPipe, TruncatePipe, SafePipe]
+  exports: [SortByPipe, SearchPipe, HourAndMinConvertorPipe, TruncatePipe, SafePipe, CamelCaseToRegularWordPipe, NotAvailablePipe],
+  declarations: [SortByPipe, SearchPipe, HourAndMinConvertorPipe, TruncatePipe, SafePipe, CamelCaseToRegularWordPipe, NotAvailablePipe]
 })
 export class PipeModule {}
