@@ -24,6 +24,12 @@
       ],
       "pipes/*": [
         "dist/pipes/*"
+      ],
+      "directive": [
+        "dist/directive"
+      ],
+      "directive/*": [
+        "dist/directive/*"
       ]
     }
   }
