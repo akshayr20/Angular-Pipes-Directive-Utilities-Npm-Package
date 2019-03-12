@@ -1,11 +1,11 @@
-import { Directive, EventEmitter, Output, Input, ElementRef, HostListener } from '@angular/core';
+import { Directive, EventEmitter, Output, Input, ElementRef, HostListener, NgModule, OnInit, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Directive({
   selector: '[diClickedOutside]'
 })
-export class ClickedOutsideDirective {
+export class ClickedOutsideDirective implements OnDestroy {
   @Output() public clickOutside = new EventEmitter<MouseEvent>();
   @Input() public disabled = false;
   private isLoaded = false;
@@ -44,3 +44,41 @@ export class ClickedOutsideDirective {
     this.clickOutside.unsubscribe();
   }
 }
+
+@Directive({
+  selector: '[diDebounceClick]'
+})
+export class DebounceClickDirective implements OnDestroy {
+  @Input() debounceTime = 300;
+  @Output() debounceClick = new EventEmitter();
+  private clicks = new Subject();
+  private subscription: Subscription;
+  private alreadyClicked: Boolean = false;
+
+  constructor() {
+    this.subscription = this.clicks.pipe(debounceTime(this.debounceTime)).subscribe(e => {
+      this.alreadyClicked = false;
+    });
+  }
+
+  @HostListener('click', ['$event'])
+  clickEvent(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!this.alreadyClicked) {
+      this.alreadyClicked = true;
+      this.debounceClick.emit();
+      this.clicks.next(event);
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+}
+
+@NgModule({
+  declarations: [ClickedOutsideDirective, DebounceClickDirective],
+  exports: [ClickedOutsideDirective, DebounceClickDirective]
+})
+export class DirectiveModule {}
